@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         params = new HashMap<>();
         params.put("sort_by", "popularity.desc");
         params.put("page", Integer.toString(currentPage));
-        apiHandler.get("discover/movie", params, MoviesListModel.class).observeOn(AndroidSchedulers.mainThread()).subscribe(moviesListModelConsumer);
+        apiHandler.get("movie/popular", params, MoviesListModel.class).observeOn(AndroidSchedulers.mainThread()).subscribe(moviesListModelConsumer);
     }
 
     @Override
@@ -93,14 +93,14 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
             resetRvAdapter();
             params.put("page", "1");
             params.put("sort_by", "vote_count.desc");
-            apiHandler.get("discover/movie", params, MoviesListModel.class).observeOn(AndroidSchedulers.mainThread()).subscribe(moviesListModelConsumer);
+            apiHandler.get("movie/top_rated", params, MoviesListModel.class).observeOn(AndroidSchedulers.mainThread()).subscribe(moviesListModelConsumer);
         }
 
         if (id == R.id.order_most_viewed && currentSelectedFilter != R.id.order_most_viewed) {
             resetRvAdapter();
             params.put("page", "1");
             params.put("sort_by", "popularity.desc");
-            apiHandler.get("discover/movie", params, MoviesListModel.class).observeOn(AndroidSchedulers.mainThread()).subscribe(moviesListModelConsumer);
+            apiHandler.get("movie/popular", params, MoviesListModel.class).observeOn(AndroidSchedulers.mainThread()).subscribe(moviesListModelConsumer);
         }
         currentSelectedFilter = id;
         return super.onOptionsItemSelected(item);
