@@ -11,7 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.get.runner.AndroidJUnitRunner"
         def STRING = "String"
-        buildConfigField STRING, "API_KEY", "\"ce3fec6a772926906065ea1801e11e80\""
+        buildConfigField STRING, "API_KEY", "\"api_key\""
     }
     buildTypes {
         release {
