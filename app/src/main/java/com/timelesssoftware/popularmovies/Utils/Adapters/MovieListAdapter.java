@@ -57,8 +57,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         final MovieModel movieModel = this.movieModelList.get(position);
         String url = ImageHelper.generateImageUrl(movieModel.poster_path, ImageHelper.ImageSizes.w500);
         holder.movieTitleTv.setText(movieModel.getTitle());
-        //Comment out for udacity
-        /*GlideApp.with(mContext).asBitmap()
+        GlideApp.with(mContext).asBitmap()
                 .load(url).diskCacheStrategy(DiskCacheStrategy.ALL).
                 into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -85,10 +84,10 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
                             holder.movieTitleTv.setTextColor(Color.WHITE);
                         }
                     }
-                });*/
+                });
 
         Glide.with(mContext).load(url).into(holder.movieImageIv);
-        holder.movieTitleTv.setTextColor(Color.BLACK);
+
         setAnimation(holder.itemView, position);
     }
 
