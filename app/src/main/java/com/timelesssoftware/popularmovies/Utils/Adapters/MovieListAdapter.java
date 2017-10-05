@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -56,7 +57,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         final MovieModel movieModel = this.movieModelList.get(position);
         String url = ImageHelper.generateImageUrl(movieModel.poster_path, ImageHelper.ImageSizes.w500);
         holder.movieTitleTv.setText(movieModel.getTitle());
-        GlideApp.with(mContext).asBitmap()
+        //Comment out for udacity
+        /*GlideApp.with(mContext).asBitmap()
                 .load(url).diskCacheStrategy(DiskCacheStrategy.ALL).
                 into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -83,7 +85,10 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
                             holder.movieTitleTv.setTextColor(Color.WHITE);
                         }
                     }
-                });
+                });*/
+
+        Glide.with(mContext).load(url).into(holder.movieImageIv);
+        holder.movieTitleTv.setTextColor(Color.BLACK);
         setAnimation(holder.itemView, position);
     }
 
