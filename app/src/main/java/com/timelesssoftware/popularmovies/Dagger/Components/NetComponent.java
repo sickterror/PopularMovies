@@ -7,7 +7,6 @@ import com.timelesssoftware.popularmovies.Dagger.Modules.AppModule;
 import com.timelesssoftware.popularmovies.Dagger.Modules.NetModule;
 import com.timelesssoftware.popularmovies.MainActivity;
 import com.timelesssoftware.popularmovies.Utils.Network.ApiHandler;
-import com.timelesssoftware.popularmovies.Utils.ViewModels.MovieListViewModel;
 
 import javax.inject.Singleton;
 
@@ -23,11 +22,12 @@ import dagger.Component;
 @Component(modules = {AppModule.class, NetModule.class})
 public abstract class NetComponent {
     public abstract void inject(ApiHandler apiHandler);
+
     //void inject(AllPosLocationsViewModel allPosLocationsViewModel);
     @ApplicationContext
     public abstract Context getContext();
 
     public abstract void inject(MainActivity mainActivity);
-
-    public abstract void inject(MovieListViewModel movieListViewModel);
 }
+
+

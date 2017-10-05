@@ -15,9 +15,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -26,6 +32,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Luka on 3. 10. 2017.
@@ -74,6 +81,39 @@ public class ApiHandler {
                     return;
                 }
                 listener.onError(response.code());
+            }
+        });
+    }
+
+    public <T> Observable<T> get(final String method, Map<String,String>params, final Class<T> clazz){
+        HttpUrl.Builder httpBuider = HttpUrl.parse(API_ENDPOINT+ method).newBuilder();
+        if (params != null) {
+            for(Map.Entry<String, String> param : params.entrySet()) {
+                httpBuider.addQueryParameter(param.getKey(),param.getValue());
+            }
+        }
+        httpBuider.addQueryParameter("api_key",API_KEY);
+        Log.d("ApiHandler", httpBuider.build().toString());
+        final Request request = new Request.Builder().url(httpBuider.build()).build();
+        return  Observable.create(new ObservableOnSubscribe<T>() {
+            @Override
+            public void subscribe(@NonNull final ObservableEmitter<T> e) throws Exception {
+                mOkHttp.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.i("ApiHandler", e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        if (response.code() == 200) {
+                            T list = mGson.fromJson(response.body().charStream(), clazz);
+                            e.onNext(list);
+                            e.onComplete();
+                            return;
+                        }
+                    }
+                });
             }
         });
     }
