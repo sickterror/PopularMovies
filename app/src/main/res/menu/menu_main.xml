@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.timelesssoftware.popularmovies.MainActivity">
+    <item
+        android:id="@+id/order_most_poular"
+        android:orderInCategory="100"
+        android:title="@string/filter_movie_most_popular"
+        app:showAsAction="never"
+       />
+    <item
+        android:id="@+id/order_most_viewed"
+        android:orderInCategory="200"
+        android:title="@string/filter_movie_most_viewed"
+        app:showAsAction="never"
+       />
+</menu>

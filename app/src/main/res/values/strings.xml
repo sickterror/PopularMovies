@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="action_settings">Settings</string>
+    <string name="filter_movie_most_viewed">Most Viewed</string>
+    <string name="filter_movie_most_popular">Most Popular</string>
+    <string name="title_activity_movie_deatiled">MovieDeatiledActivity</string>
+    <string name="movie_poster_transition_name">shareMoviePoster</string>
+    <string name="movie_average_vote">Average vote:</string>
+    <string name="movie_overview_title">Movie overview:</string>
+    <string name="movie_release_date">Release date:</string>
+    <string name="contentDescription_backdrop_iv">Movie image</string>
+    <string name="contentDescription_movie_poster">Movie poster</string>
+</resources>
