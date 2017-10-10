@@ -85,9 +85,6 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
                         }
                     }
                 });
-
-        Glide.with(mContext).load(url).into(holder.movieImageIv);
-
         setAnimation(holder.itemView, position);
     }
 
