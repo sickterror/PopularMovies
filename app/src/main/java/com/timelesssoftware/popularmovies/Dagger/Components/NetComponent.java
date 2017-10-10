@@ -32,8 +32,7 @@ public abstract class NetComponent {
     public abstract void inject(MainActivity mainActivity);
 
 
-    public void inject(MostViewdMoviesFragment mostViewdMoviesFragment) {
-    }
+    public abstract void inject(MostViewdMoviesFragment mostViewdMoviesFragment);
 }
 
 

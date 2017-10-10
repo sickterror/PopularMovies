@@ -23,7 +23,7 @@ import com.timelesssoftware.popularmovies.Models.MovieModel;
 import com.timelesssoftware.popularmovies.Models.MoviesListModel;
 import com.timelesssoftware.popularmovies.PopularMoviesApp;
 import com.timelesssoftware.popularmovies.R;
-import com.timelesssoftware.popularmovies.Utils.Adapters.MovieListAdapter;
+import com.timelesssoftware.popularmovies.UI.Adapters.MovieListAdapter;
 import com.timelesssoftware.popularmovies.Utils.Network.ApiHandler;
 
 import java.util.ArrayList;
@@ -56,6 +56,7 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
 
     @Inject
     ApiHandler apiHandler;
+
     private RecyclerView movieListRv;
     private List<MovieModel> movieModelList;
     private MovieListAdapter movieListAdapter;
@@ -120,6 +121,7 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
         movieListRv.setAnimation(null);
         params = new HashMap<>();
         if (savedInstanceState == null) {
+            movieModelList = new ArrayList<>();
             params.put("sort_by", "popularity.desc");
             params.put("page", Integer.toString(currentPage));
             apiHandler.get(mApiEndoint, params, MoviesListModel.class).observeOn(AndroidSchedulers.mainThread()).subscribe(moviesListModelConsumer);
@@ -127,8 +129,6 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
 
         if (savedInstanceState != null) {
             movieModelList = savedInstanceState.getParcelableArrayList("movies");
-        } else {
-            movieModelList = new ArrayList<>();
         }
 
         movieListRv.setLayoutManager(mLayoutManager);
@@ -141,8 +141,8 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach(context);
         PopularMoviesApp.getNetComponent().inject(this);
+        super.onAttach(context);
     }
 
     public void resetRvAdapter() {
