@@ -6,7 +6,9 @@ import com.timelesssoftware.popularmovies.Dagger.ApplicationContext;
 import com.timelesssoftware.popularmovies.Dagger.Modules.AppModule;
 import com.timelesssoftware.popularmovies.Dagger.Modules.NetModule;
 import com.timelesssoftware.popularmovies.MainActivity;
+import com.timelesssoftware.popularmovies.UI.Fragments.MostViewdMoviesFragment;
 import com.timelesssoftware.popularmovies.Utils.Network.ApiHandler;
+;
 
 import javax.inject.Singleton;
 
@@ -28,6 +30,10 @@ public abstract class NetComponent {
     public abstract Context getContext();
 
     public abstract void inject(MainActivity mainActivity);
+
+
+    public void inject(MostViewdMoviesFragment mostViewdMoviesFragment) {
+    }
 }
 
 
