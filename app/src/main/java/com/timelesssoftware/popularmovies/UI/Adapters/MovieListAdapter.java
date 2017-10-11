@@ -1,4 +1,4 @@
-package com.timelesssoftware.popularmovies.Utils.Adapters;
+package com.timelesssoftware.popularmovies.UI.Adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -85,9 +84,6 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
                         }
                     }
                 });
-
-        Glide.with(mContext).load(url).into(holder.movieImageIv);
-
         setAnimation(holder.itemView, position);
     }
 

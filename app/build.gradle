@@ -11,7 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.get.runner.AndroidJUnitRunner"
         def STRING = "String"
-        buildConfigField STRING, "API_KEY", "\"api key\""
+        buildConfigField STRING, "API_KEY", "\"\""
     }
     buildTypes {
         release {
@@ -68,4 +68,5 @@ dependencies {
 
     compile 'com.android.support:design:26.+'
     compile 'com.android.support:support-v4:26.+'
+    compile 'com.android.support:recyclerview-v7:26.+'
 }
