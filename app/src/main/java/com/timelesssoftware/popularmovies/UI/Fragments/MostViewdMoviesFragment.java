@@ -24,6 +24,7 @@ import com.timelesssoftware.popularmovies.Models.MoviesListModel;
 import com.timelesssoftware.popularmovies.PopularMoviesApp;
 import com.timelesssoftware.popularmovies.R;
 import com.timelesssoftware.popularmovies.UI.Adapters.MovieListAdapter;
+import com.timelesssoftware.popularmovies.Utils.Helpers.LukaRvScrollListener;
 import com.timelesssoftware.popularmovies.Utils.Network.ApiHandler;
 
 import java.util.ArrayList;
@@ -132,7 +133,14 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
         }
 
         movieListRv.setLayoutManager(mLayoutManager);
-        movieListRv.addOnScrollListener(onScrollListener);
+        //movieListRv.addOnScrollListener(onScrollListener);
+        movieListRv.addOnScrollListener(new LukaRvScrollListener.PageScrollListener(5) {
+            @Override
+            public void onNextPage(int page, int nextPage) {
+                params.put("page", Integer.toString(page));
+                apiHandler.get("discover/movie", params, MoviesListModel.class).observeOn(AndroidSchedulers.mainThread()).subscribe(moviesListModelConsumer);
+            }
+        });
         movieListAdapter = new MovieListAdapter(movieModelList, getContext());
         movieListAdapter.setmOnMovieSelectListener(this);
         movieListRv.setAdapter(movieListAdapter);
@@ -150,34 +158,6 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
         movieListAdapter.notifyDataSetChanged();
         currentPage = 1;
     }
-
-    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            if (dy > 0) //check for scroll down
-            {
-                visibleItemCount = recyclerView.getChildCount();
-                totalItemCount = mLayoutManager.getItemCount();
-                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-
-                if (loading) {
-                    if (totalItemCount > previousTotal) {
-                        loading = false;
-                        previousTotal = totalItemCount;
-                    }
-                }
-                if (!loading && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem + visibleThreshold)) {
-                    // End has been reached
-                    // Do something
-                    currentPage++;
-                    params.put("page", Integer.toString(currentPage));
-                    apiHandler.get("discover/movie", params, MoviesListModel.class).observeOn(AndroidSchedulers.mainThread()).subscribe(moviesListModelConsumer);
-                    loading = true;
-                }
-            }
-        }
-    };
 
     private Consumer<MoviesListModel> moviesListModelConsumer = new Consumer<MoviesListModel>() {
         @Override

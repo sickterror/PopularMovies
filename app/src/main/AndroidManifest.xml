@@ -38,6 +38,11 @@
             android:label="@string/title_activity_movie_deatiled"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"/>
+        <provider
+            android:authorities="@string/content_authority"
+            android:name=".Data.PopularMoviesProvider"
+            android:exported="false"
+            android:syncable="true"/>
     </application>
 
 </manifest>

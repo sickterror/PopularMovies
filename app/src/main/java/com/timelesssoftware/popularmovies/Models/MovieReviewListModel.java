@@ -12,3 +12,4 @@ public class MovieReviewListModel<T> {
     public int total_pages;
     public List<T> results;
 }
+

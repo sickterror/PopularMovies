@@ -123,7 +123,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     private void setAnimation(View viewToAnimate, int position) {
         // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition) {
+        if (position > lastPosition && lastPosition < 6) {
             Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), R.anim.slide_bottom_top);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;

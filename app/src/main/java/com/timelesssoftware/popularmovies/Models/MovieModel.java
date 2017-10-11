@@ -24,6 +24,8 @@ public class MovieModel implements Parcelable {
     public String release_date;
     public int color = 0;
 
+    public MovieModel(){}
+
     protected MovieModel(Parcel in) {
         vote_count = in.readInt();
         id = in.readInt();

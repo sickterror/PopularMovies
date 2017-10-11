@@ -2,6 +2,7 @@ package com.timelesssoftware.popularmovies.Dagger.Components;
 
 import android.content.Context;
 
+import com.timelesssoftware.popularmovies.Activities.MovieDeatiledActivity;
 import com.timelesssoftware.popularmovies.Dagger.ApplicationContext;
 import com.timelesssoftware.popularmovies.Dagger.Modules.AppModule;
 import com.timelesssoftware.popularmovies.Dagger.Modules.NetModule;
@@ -31,8 +32,9 @@ public abstract class NetComponent {
 
     public abstract void inject(MainActivity mainActivity);
 
-
     public abstract void inject(MostViewdMoviesFragment mostViewdMoviesFragment);
+
+    public abstract void inject(MovieDeatiledActivity movieDeatiledActivity);
 }
 
 
