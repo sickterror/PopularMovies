@@ -147,7 +147,7 @@ public class MovieDeatiledActivity extends AppCompatActivity implements View.OnC
     }
 
     void animate() {
-        String imageUrl = ImageHelper.generateImageUrl(movieModel.poster_path, ImageHelper.ImageSizes.w342);
+        String imageUrl = ImageHelper.generateImageUrl(movieModel.poster_path, ImageHelper.ImageSizes.w500);
         supportPostponeEnterTransition();
         Glide.with(this)
                 .load(imageUrl)

@@ -1,9 +1,12 @@
 package com.timelesssoftware.popularmovies.UI.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.timelesssoftware.popularmovies.Activities.MovieDeatiledActivity;
 import com.timelesssoftware.popularmovies.Data.PopularMoviesHelper;
 import com.timelesssoftware.popularmovies.Data.PopularMoviesProvider;
 import com.timelesssoftware.popularmovies.Models.MovieModel;
@@ -114,7 +118,14 @@ public class UserFavoritedMoviesFragment extends Fragment implements MovieListAd
 
     @Override
     public void onSelectMovieWithTransition(int position, ImageView imageView) {
-
+        MovieModel movieModel = mFavoritedList.get(position);
+        Intent intent = new Intent(getContext(), MovieDeatiledActivity.class);
+        intent.putExtra("movieModel", movieModel);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(),
+                        imageView,
+                        ViewCompat.getTransitionName(imageView));
+        startActivity(intent, options.toBundle());
     }
 
     @Override
