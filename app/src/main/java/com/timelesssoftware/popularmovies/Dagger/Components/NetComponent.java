@@ -7,7 +7,9 @@ import com.timelesssoftware.popularmovies.Dagger.ApplicationContext;
 import com.timelesssoftware.popularmovies.Dagger.Modules.AppModule;
 import com.timelesssoftware.popularmovies.Dagger.Modules.NetModule;
 import com.timelesssoftware.popularmovies.MainActivity;
+import com.timelesssoftware.popularmovies.UI.Adapters.MovieListAdapter;
 import com.timelesssoftware.popularmovies.UI.Fragments.MostViewdMoviesFragment;
+import com.timelesssoftware.popularmovies.UI.Fragments.UserFavoritedMoviesFragment;
 import com.timelesssoftware.popularmovies.Utils.Network.ApiHandler;
 ;
 
@@ -35,6 +37,10 @@ public abstract class NetComponent {
     public abstract void inject(MostViewdMoviesFragment mostViewdMoviesFragment);
 
     public abstract void inject(MovieDeatiledActivity movieDeatiledActivity);
+
+    public abstract void inject(UserFavoritedMoviesFragment userFavoritedMoviesFragment);
+
+    public abstract void inject(MovieListAdapter movieListAdapter);
 }
 
 

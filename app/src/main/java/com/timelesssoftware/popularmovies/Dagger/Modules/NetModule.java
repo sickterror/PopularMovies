@@ -1,11 +1,15 @@
 package com.timelesssoftware.popularmovies.Dagger.Modules;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.timelesssoftware.popularmovies.Dagger.ApplicationContext;
+import com.timelesssoftware.popularmovies.Data.PopularMoviesHelper;
+import com.timelesssoftware.popularmovies.Data.PopularMoviesProvider;
 import com.timelesssoftware.popularmovies.Utils.Network.ApiHandler;
 
 import javax.inject.Singleton;
@@ -58,5 +62,10 @@ public class NetModule {
     @Singleton
     ApiHandler provideApiHandler(OkHttpClient okHttpClient, Gson mGson, SharedPreferences mSharedPrefernces) {
         return new ApiHandler(okHttpClient, mGson, mSharedPrefernces);
+    }
+
+    @Provides
+    PopularMoviesHelper popularMoviesProvider(@ApplicationContext Context context){
+        return  new PopularMoviesHelper(context);
     }
 }

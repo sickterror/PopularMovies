@@ -1,6 +1,7 @@
 package com.timelesssoftware.popularmovies.Data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -35,8 +36,8 @@ public class PopularMoviesProvider extends ContentProvider {
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = CONTENT_AUTHORITY;
-        matcher.addURI(authority, "movies", MOVIES);
-        matcher.addURI(authority, "movies/#", MOVIES_WITH_ID);
+        matcher.addURI(authority, "favorited_movie", MOVIES);
+        matcher.addURI(authority, "favorited_movie/#", MOVIES_WITH_ID);
         return matcher;
     }
 
@@ -60,7 +61,18 @@ public class PopularMoviesProvider extends ContentProvider {
                 }
                 return cursor;
             case MOVIES_WITH_ID:
-                break;
+                Cursor curosrWithQ = db.query(
+                        PopularMoviesContract.FavoritedMovieField.TABLE_FAVORITED_MOVIES,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                if (null != getContext()) {
+                    curosrWithQ.setNotificationUri(getContext().getContentResolver(), uri);
+                }
+                return curosrWithQ;
         }
         return null;
     }
@@ -80,8 +92,18 @@ public class PopularMoviesProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        int numDeleted = 0;
+        final SQLiteDatabase db = mDatabase.getReadableDatabase();
+        switch (buildUriMatcher().match(uri)) {
+            case MOVIES_WITH_ID:
+                numDeleted = db.delete(PopularMoviesContract.FavoritedMovieField.TABLE_FAVORITED_MOVIES,
+                        selection,
+                        selectionArgs);
+                break;
+        }
+
+        return numDeleted;
     }
 
     @Override

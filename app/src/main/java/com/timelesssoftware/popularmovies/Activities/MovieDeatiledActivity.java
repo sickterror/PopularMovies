@@ -313,8 +313,8 @@ public class MovieDeatiledActivity extends AppCompatActivity implements View.OnC
                     }
                 }
 
-                Uri uri = ContentUris.withAppendedId(PopularMoviesContract.FavoritedMovieField.CONTENT_URI, "19404");
-                Cursor ca = getContentResolver().query(PopularMoviesContract.FavoritedMovieField.CONTENT_URI, null, PopularMoviesContract.FavoritedMovieField.id, new String[]{"19404"}, null);
+                Uri uri = PopularMoviesContract.FavoritedMovieField.CONTENT_URI.buildUpon().appendPath("19404").build();
+                Cursor ca = getContentResolver().query(uri, null, PopularMoviesContract.FavoritedMovieField.id + " = ?", new String[]{"19404"}, null);
                 if (ca != null) {
                     while (ca.moveToNext()) {
                         MovieModel model = ContentValuesMapper.mapCursorToMovieModel(ca);

@@ -12,18 +12,23 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.timelesssoftware.popularmovies.Data.PopularMoviesHelper;
 import com.timelesssoftware.popularmovies.Models.MovieModel;
+import com.timelesssoftware.popularmovies.PopularMoviesApp;
 import com.timelesssoftware.popularmovies.R;
 import com.timelesssoftware.popularmovies.Utils.Network.ImageHelper;
 import com.timelesssoftware.popularmovies.Utils.Pallete.GlideApp;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by Luka on 3. 10. 2017.
@@ -36,9 +41,13 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     private Context mContext;
     private int lastPosition = -1;
 
+    @Inject
+    PopularMoviesHelper popularMoviesHelper;
+
     public MovieListAdapter(List<MovieModel> movieModelList, Context mContext) {
         this.movieModelList = movieModelList;
         this.mContext = mContext;
+        PopularMoviesApp.getNetComponent().inject(this);
     }
 
     public void setmOnMovieSelectListener(OnMovieSelectListener onMovieSelectListener) {
@@ -56,6 +65,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         final MovieModel movieModel = this.movieModelList.get(position);
         String url = ImageHelper.generateImageUrl(movieModel.poster_path, ImageHelper.ImageSizes.w500);
         holder.movieTitleTv.setText(movieModel.getTitle());
+        holder.setMovieModel(movieModel);
         GlideApp.with(mContext).asBitmap()
                 .load(url).diskCacheStrategy(DiskCacheStrategy.ALL).
                 into(new SimpleTarget<Bitmap>() {
@@ -79,11 +89,18 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
                         holder.movieInfoHolder.setBackgroundColor(color);
                         if (color == mContext.getResources().getColor(R.color.md_white_1000)) {
                             holder.movieTitleTv.setTextColor(Color.BLACK);
-                        }else{
+                        } else {
                             holder.movieTitleTv.setTextColor(Color.WHITE);
                         }
                     }
                 });
+        if (popularMoviesHelper.isMovieFavorited(String.valueOf(movieModel.getId())) != null) {
+            holder.markMovieAsFavorited();
+            holder.isMovieFavorited = true;
+        } else {
+            holder.markMovieAsUnfavorited();
+            holder.isMovieFavorited = false;
+        }
         setAnimation(holder.itemView, position);
     }
 
@@ -94,10 +111,13 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     public class MovieListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public final FrameLayout movieInfoHolder;
+        public final View movieInfoHolder;
         public final ImageView movieImageIv;
         private OnMovieSelectListener onMovieSelectListener;
         public TextView movieTitleTv;
+        public ImageButton markAsFavorited;
+        public boolean isMovieFavorited;
+        public MovieModel movieModel;
 
         public MovieListViewHolder(View itemView, OnMovieSelectListener onMovieSelectListener) {
             super(itemView);
@@ -105,6 +125,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
             this.onMovieSelectListener = onMovieSelectListener;
             movieInfoHolder = itemView.findViewById(R.id.movie_title);
             movieTitleTv = itemView.findViewById(R.id.movie_view_holder_title);
+            markAsFavorited = itemView.findViewById(R.id.marke_movie_as_favorited);
+            markAsFavorited.setOnClickListener(this);
             this.itemView.setOnClickListener(this);
         }
 
@@ -118,6 +140,29 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
                 this.onMovieSelectListener.onSelectMovie(getAdapterPosition());
                 this.onMovieSelectListener.onSelectMovieWithTransition(getAdapterPosition(), movieImageIv);
             }
+
+            if (view.getId() == R.id.marke_movie_as_favorited) {
+                if (isMovieFavorited) {
+                    markMovieAsUnfavorited();
+                    isMovieFavorited = false;
+                } else {
+                    markMovieAsFavorited();
+                    isMovieFavorited = true;
+                }
+                onMovieSelectListener.onMarkMovieFavorited(isMovieFavorited, movieModel);
+            }
+        }
+
+        public void markMovieAsFavorited() {
+            markAsFavorited.setImageResource(R.drawable.ic_favorite_black_24dp);
+        }
+
+        public void markMovieAsUnfavorited() {
+            markAsFavorited.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        }
+
+        public void setMovieModel(MovieModel movieModel) {
+            this.movieModel = movieModel;
         }
     }
 
@@ -134,6 +179,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         void onSelectMovie(int position);
 
         void onSelectMovieWithTransition(int position, ImageView imageView);
+
+        void onMarkMovieFavorited(boolean state, MovieModel movieModel);
     }
 
     @Override

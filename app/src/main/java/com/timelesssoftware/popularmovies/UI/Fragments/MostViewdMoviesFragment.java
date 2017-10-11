@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.timelesssoftware.popularmovies.Activities.MovieDeatiledActivity;
+import com.timelesssoftware.popularmovies.Data.PopularMoviesHelper;
 import com.timelesssoftware.popularmovies.Models.MovieModel;
 import com.timelesssoftware.popularmovies.Models.MoviesListModel;
 import com.timelesssoftware.popularmovies.PopularMoviesApp;
@@ -57,6 +58,8 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
 
     @Inject
     ApiHandler apiHandler;
+    @Inject
+    PopularMoviesHelper popularMoviesHelper;
 
     private RecyclerView movieListRv;
     private List<MovieModel> movieModelList;
@@ -192,6 +195,14 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
                         imageView,
                         ViewCompat.getTransitionName(imageView));
         startActivity(intent, options.toBundle());
+    }
+
+    @Override
+    public void onMarkMovieFavorited(boolean state, MovieModel movieModel) {
+        if (state)
+            popularMoviesHelper.markMovieAsFavorited(movieModel);
+        else
+            popularMoviesHelper.removeMovieModel(String.valueOf(movieModel.getId()));
     }
 
     @Override

@@ -155,6 +155,11 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         startActivity(intent, options.toBundle());
     }
 
+    @Override
+    public void onMarkMovieFavorited(boolean state, MovieModel movieModel) {
+
+    }
+
     private Consumer<MoviesListModel> moviesListModelConsumer = new Consumer<MoviesListModel>() {
         @Override
         public void accept(MoviesListModel moviesListModel) throws Exception {
