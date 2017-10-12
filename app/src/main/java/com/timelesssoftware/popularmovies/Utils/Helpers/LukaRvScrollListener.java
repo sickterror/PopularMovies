@@ -9,6 +9,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Luka on 11.10.2017.
+ *
+ * RecylerView scroll listener
+ *
+ * TODO: implement last page
  */
 
 public class LukaRvScrollListener {

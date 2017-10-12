@@ -2,11 +2,11 @@ package com.timelesssoftware.popularmovies.Dagger.Components;
 
 import android.content.Context;
 
-import com.timelesssoftware.popularmovies.Activities.MovieDeatiledActivity;
+import com.timelesssoftware.popularmovies.UI.Activities.MovieDeatiledActivity;
 import com.timelesssoftware.popularmovies.Dagger.ApplicationContext;
 import com.timelesssoftware.popularmovies.Dagger.Modules.AppModule;
 import com.timelesssoftware.popularmovies.Dagger.Modules.NetModule;
-import com.timelesssoftware.popularmovies.MainActivity;
+
 import com.timelesssoftware.popularmovies.UI.Adapters.MovieListAdapter;
 import com.timelesssoftware.popularmovies.UI.Fragments.MostViewdMoviesFragment;
 import com.timelesssoftware.popularmovies.UI.Fragments.UserFavoritedMoviesFragment;
@@ -32,7 +32,6 @@ public abstract class NetComponent {
     @ApplicationContext
     public abstract Context getContext();
 
-    public abstract void inject(MainActivity mainActivity);
 
     public abstract void inject(MostViewdMoviesFragment mostViewdMoviesFragment);
 

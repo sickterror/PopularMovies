@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.MovieDeatiledActivity"
+            android:name=".UI.Activities.MovieDeatiledActivity"
             android:label="@string/title_activity_movie_deatiled"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"/>

@@ -2,6 +2,7 @@ package com.timelesssoftware.popularmovies.UI.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -9,20 +10,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.timelesssoftware.popularmovies.Activities.MovieDeatiledActivity;
+import com.timelesssoftware.popularmovies.UI.Activities.MovieDeatiledActivity;
 import com.timelesssoftware.popularmovies.Data.PopularMoviesHelper;
-import com.timelesssoftware.popularmovies.Data.PopularMoviesProvider;
+import com.timelesssoftware.popularmovies.Models.FragmentSettingsObject;
 import com.timelesssoftware.popularmovies.Models.MovieModel;
-import com.timelesssoftware.popularmovies.Models.MoviesListModel;
 import com.timelesssoftware.popularmovies.PopularMoviesApp;
 import com.timelesssoftware.popularmovies.R;
 import com.timelesssoftware.popularmovies.UI.Adapters.MovieListAdapter;
-import com.timelesssoftware.popularmovies.UI.Adapters.MovieReviewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class UserFavoritedMoviesFragment extends Fragment implements MovieListAd
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String FRAGMENT_SETTINGS = "fragment_settings";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -51,6 +54,8 @@ public class UserFavoritedMoviesFragment extends Fragment implements MovieListAd
 
     @Inject
     public PopularMoviesHelper popularMoviesHelper;
+    private FragmentSettingsObject fragmentSettingsObject;
+    private Toolbar toolbar;
 
     public UserFavoritedMoviesFragment() {
         // Required empty public constructor
@@ -63,10 +68,10 @@ public class UserFavoritedMoviesFragment extends Fragment implements MovieListAd
      * @return A new instance of fragment UserFavoritedMoviesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static UserFavoritedMoviesFragment newInstance() {
+    public static UserFavoritedMoviesFragment newInstance(FragmentSettingsObject fragmentSettingsObject) {
         UserFavoritedMoviesFragment fragment = new UserFavoritedMoviesFragment();
         Bundle args = new Bundle();
-
+        args.putParcelable(FRAGMENT_SETTINGS, fragmentSettingsObject);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,6 +88,7 @@ public class UserFavoritedMoviesFragment extends Fragment implements MovieListAd
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        fragmentSettingsObject = getArguments().getParcelable(FRAGMENT_SETTINGS);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_user_favorited_movies, container, false);
     }
@@ -92,7 +98,7 @@ public class UserFavoritedMoviesFragment extends Fragment implements MovieListAd
         super.onViewCreated(view, savedInstanceState);
         mMovieFavoritedRv = view.findViewById(R.id.user_favorited_rv);
         mMovieFavoritedRv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-
+        toolbar = view.findViewById(R.id.favorited_toolbar);
         if (savedInstanceState == null) {
             mFavoritedList = new ArrayList<>();
             mMovieFavoritedRv.setAdapter(mFavoritedAdapter);
@@ -103,6 +109,7 @@ public class UserFavoritedMoviesFragment extends Fragment implements MovieListAd
         mFavoritedAdapter.setmOnMovieSelectListener(this);
         mMovieFavoritedRv.setAdapter(mFavoritedAdapter);
         mFavoritedAdapter.notifyDataSetChanged();
+        setUpFragmentSettings();
     }
 
     @Override
@@ -146,6 +153,19 @@ public class UserFavoritedMoviesFragment extends Fragment implements MovieListAd
                 mFavoritedList.remove(i);
                 mFavoritedAdapter.notifyItemRemoved(i);
             }
+        }
+    }
+
+    public void setUpFragmentSettings() {
+        Window window = getActivity().getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        int statusColor = getResources().getColor(fragmentSettingsObject.statusBarColor);
+        int tolbarColor = getResources().getColor(fragmentSettingsObject.toolbarColor);
+        window.setStatusBarColor(statusColor);
+        if (toolbar != null) {
+            toolbar.setTitle(fragmentSettingsObject.title);
+            toolbar.setTitleTextColor(Color.WHITE);
+            toolbar.setBackgroundColor(tolbarColor);
         }
     }
 }

@@ -5,24 +5,22 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.timelesssoftware.popularmovies.Data.PopularMoviesHelper;
 import com.timelesssoftware.popularmovies.Models.MovieModel;
 import com.timelesssoftware.popularmovies.PopularMoviesApp;
 import com.timelesssoftware.popularmovies.R;
+import com.timelesssoftware.popularmovies.Utils.Helpers.PalleteParser;
 import com.timelesssoftware.popularmovies.Utils.Network.ImageHelper;
 import com.timelesssoftware.popularmovies.Utils.Pallete.GlideApp;
 
@@ -67,42 +65,44 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         holder.movieTitleTv.setText(movieModel.getTitle());
         holder.setMovieModel(movieModel);
         GlideApp.with(mContext).asBitmap()
-                .load(url).diskCacheStrategy(DiskCacheStrategy.ALL).
-                into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                        holder.movieImageIv.setImageBitmap(resource);
-                        extractColor(resource);
-                    }
+                .load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(new PalleteParser(movieModel.getPoster_path(), Color.BLACK) {
+            @Override
+            public void onPalleteReady(Palette palete) {
 
-                    private void extractColor(Bitmap b) {
-                        int color;
-                        if (movieModel.getColor() != 0) {
-                            Log.d("MovieListAdapter", "got color from cache");
-                            color = movieModel.getColor();
-                        } else {
-                            Log.d("MovieListAdapter", "genereateing color");
-                            Palette p = Palette.from(b).generate();
-                            color = p.getDarkVibrantColor(mContext.getResources().getColor(R.color.md_white_1000));
-                            movieModel.setColor(color);
-                        }
-                        holder.movieInfoHolder.setBackgroundColor(color);
-                        if (color == mContext.getResources().getColor(R.color.md_white_1000)) {
-                            holder.movieTitleTv.setTextColor(Color.BLACK);
-                        } else {
-                            holder.movieTitleTv.setTextColor(Color.WHITE);
-                        }
-                    }
-                });
+            }
+
+            @Override
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                super.onResourceReady(resource, transition);
+                holder.movieImageIv.setImageBitmap(resource);
+            }
+
+            @Override
+            protected void onDarkMutedReady(int darkMutedColor, Palette.Swatch swatch) {
+                super.onDarkMutedReady(darkMutedColor, swatch);
+                holder.movieInfoHolder.setBackgroundColor(darkMutedColor);
+                if (darkMutedColor == Color.WHITE) {
+                    holder.movieTitleTv.setTextColor(Color.WHITE);
+                } else {
+                    holder.movieTitleTv.setTextColor(Color.WHITE);
+                }
+                movieModel.setColor(darkMutedColor);
+            }
+        });
+
         if (popularMoviesHelper.isMovieFavorited(String.valueOf(movieModel.getId())) != null) {
             holder.markMovieAsFavorited();
             holder.isMovieFavorited = true;
+            movieModel.setFavorited(true);
         } else {
             holder.markMovieAsUnfavorited();
             holder.isMovieFavorited = false;
+            movieModel.setFavorited(false);
         }
         setAnimation(holder.itemView, position);
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -154,21 +154,23 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         }
 
         public void markMovieAsFavorited() {
-            markAsFavorited.setImageResource(R.drawable.ic_favorite_black_24dp);
+            markAsFavorited.setImageResource(R.drawable.ic_favorite_white_24dp);
         }
 
         public void markMovieAsUnfavorited() {
-            markAsFavorited.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            markAsFavorited.setImageResource(R.drawable.ic_favorite_border_white_24dp);
         }
 
         public void setMovieModel(MovieModel movieModel) {
             this.movieModel = movieModel;
         }
+
+
     }
 
     private void setAnimation(View viewToAnimate, int position) {
         // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition && lastPosition < 6) {
+        if (position > lastPosition && lastPosition > 6) {
             Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), R.anim.slide_bottom_top);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;

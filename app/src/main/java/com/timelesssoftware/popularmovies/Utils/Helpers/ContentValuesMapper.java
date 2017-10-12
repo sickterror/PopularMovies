@@ -9,6 +9,8 @@ import com.timelesssoftware.popularmovies.Models.MovieModel;
 
 /**
  * Created by Luka on 11.10.2017.
+ *
+ * Simple helper to map Model to content values and the other way around
  */
 
 public class ContentValuesMapper {

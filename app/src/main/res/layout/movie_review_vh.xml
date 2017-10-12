@@ -11,18 +11,27 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp" />
+
+    <ImageButton
+        android:id="@+id/open_review_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/movie_review_review"
+        android:layout_alignTop="@+id/movie_review_subject"
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_link_black_24dp" />
 
     <TextView
         android:id="@+id/movie_review_subject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/movie_review_author_iv"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="13dp"
-        android:layout_toEndOf="@+id/movie_review_author_iv" />
+        android:layout_toEndOf="@+id/movie_review_author_iv"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/movie_review_review"

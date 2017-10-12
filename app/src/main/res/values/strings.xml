@@ -20,4 +20,6 @@
     <string name="movie_reviews_title">Reviews</string>
     <string name="movie_trailers">Movie Trailers</string>
     <string name="content_authority">com.timelesssoftware.popularmovies</string>
+    <string name="filter_favorited_movies">Favorited</string>
+    <string name="no_reviews">No reviews...</string>
 </resources>

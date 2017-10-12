@@ -2,6 +2,7 @@ package com.timelesssoftware.popularmovies.UI.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -12,14 +13,19 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.timelesssoftware.popularmovies.Activities.MovieDeatiledActivity;
+
+import com.timelesssoftware.popularmovies.UI.Activities.MovieDeatiledActivity;
 import com.timelesssoftware.popularmovies.Data.PopularMoviesHelper;
+import com.timelesssoftware.popularmovies.Models.FragmentSettingsObject;
 import com.timelesssoftware.popularmovies.Models.MovieModel;
 import com.timelesssoftware.popularmovies.Models.MoviesListModel;
 import com.timelesssoftware.popularmovies.PopularMoviesApp;
@@ -50,6 +56,7 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String API_ENDPOINT = "apiEndpoint";
+    private static final String FRAGMENT_COLOR_SCHEME = "fragment_color_scheme";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -75,6 +82,8 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
     private HashMap<String, String> params;
     private Parcelable mListState;
     private String mApiEndoint;
+    private FragmentSettingsObject fragmentSettingsObject;
+    private Toolbar toolbar;
 
 
     public MostViewdMoviesFragment() {
@@ -88,10 +97,11 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
      * @return A new instance of fragment MostViewdMoviesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MostViewdMoviesFragment newInstance(String apiEndPoint) {
+    public static MostViewdMoviesFragment newInstance(String apiEndPoint, FragmentSettingsObject fragmentSettingsObject) {
         MostViewdMoviesFragment fragment = new MostViewdMoviesFragment();
         Bundle args = new Bundle();
         args.putString(API_ENDPOINT, apiEndPoint);
+        args.putParcelable(FRAGMENT_COLOR_SCHEME, fragmentSettingsObject);
         fragment.setArguments(args);
         return fragment;
     }
@@ -109,6 +119,7 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        fragmentSettingsObject = getArguments().getParcelable(FRAGMENT_COLOR_SCHEME);
         return inflater.inflate(R.layout.fragment_most_viewd_movies, container, false);
     }
 
@@ -120,7 +131,7 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
         } else {
             mLayoutManager = new GridLayoutManager(getContext(), 3);
         }
-
+        toolbar = view.findViewById(R.id.movie_fragment_toolbar);
         movieListRv = view.findViewById(R.id.most_viewed_rv);
         movieListRv.setAnimation(null);
         params = new HashMap<>();
@@ -147,6 +158,7 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
         movieListAdapter = new MovieListAdapter(movieModelList, getContext());
         movieListAdapter.setmOnMovieSelectListener(this);
         movieListRv.setAdapter(movieListAdapter);
+        colorFragment();
     }
 
 
@@ -210,6 +222,19 @@ public class MostViewdMoviesFragment extends Fragment implements MovieListAdapte
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("movies", new ArrayList<>(movieModelList));
         outState.putInt("position", currentPage);
+    }
+
+    public void colorFragment() {
+        Window window = getActivity().getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        int statusColor = getResources().getColor(fragmentSettingsObject.statusBarColor);
+        int tolbarColor = getResources().getColor(fragmentSettingsObject.toolbarColor);
+        window.setStatusBarColor(statusColor);
+        if (toolbar != null) {
+            toolbar.setTitle(fragmentSettingsObject.title);
+            toolbar.setTitleTextColor(Color.WHITE);
+            toolbar.setBackgroundColor(tolbarColor);
+        }
     }
 
     /*@Override

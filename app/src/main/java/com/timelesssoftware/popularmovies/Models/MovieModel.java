@@ -23,6 +23,7 @@ public class MovieModel implements Parcelable {
     public String overview;
     public String release_date;
     public int color = 0;
+    public boolean isFavorited = false;
 
     public MovieModel(){}
 
@@ -42,30 +43,7 @@ public class MovieModel implements Parcelable {
         overview = in.readString();
         release_date = in.readString();
         color = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(vote_count);
-        dest.writeInt(id);
-        dest.writeByte((byte) (video ? 1 : 0));
-        dest.writeDouble(vote_average);
-        dest.writeString(title);
-        dest.writeDouble(popularity);
-        dest.writeString(poster_path);
-        dest.writeString(original_language);
-        dest.writeString(original_title);
-        dest.writeIntArray(genre_ids);
-        dest.writeString(backdrop_path);
-        dest.writeByte((byte) (adult ? 1 : 0));
-        dest.writeString(overview);
-        dest.writeString(release_date);
-        dest.writeInt(color);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        isFavorited = in.readByte() != 0;
     }
 
     public static final Creator<MovieModel> CREATOR = new Creator<MovieModel>() {
@@ -79,6 +57,31 @@ public class MovieModel implements Parcelable {
             return new MovieModel[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(vote_count);
+        parcel.writeInt(id);
+        parcel.writeByte((byte) (video ? 1 : 0));
+        parcel.writeDouble(vote_average);
+        parcel.writeString(title);
+        parcel.writeDouble(popularity);
+        parcel.writeString(poster_path);
+        parcel.writeString(original_language);
+        parcel.writeString(original_title);
+        parcel.writeIntArray(genre_ids);
+        parcel.writeString(backdrop_path);
+        parcel.writeByte((byte) (adult ? 1 : 0));
+        parcel.writeString(overview);
+        parcel.writeString(release_date);
+        parcel.writeInt(color);
+        parcel.writeByte((byte) (isFavorited ? 1 : 0));
+    }
 
     public int getVote_count() {
         return vote_count;
@@ -198,5 +201,13 @@ public class MovieModel implements Parcelable {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public boolean isFavorited() {
+        return isFavorited;
+    }
+
+    public void setFavorited(boolean favorited) {
+        isFavorited = favorited;
     }
 }

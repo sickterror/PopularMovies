@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.timelesssoftware.popularmovies.MainActivity">
+    <item
+        android:id="@+id/menu_mark_as_fav"
+        android:orderInCategory="100"
+        android:title="@string/filter_movie_most_popular"
+        android:icon="@drawable/ic_favorite_border_white_24dp"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/movie_share"
+        android:orderInCategory="200"
+        android:title="@string/filter_movie_most_viewed"
+        android:icon="@drawable/ic_share_white_24dp"
+        app:showAsAction="ifRoom"
+        />
+</menu>
